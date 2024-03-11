@@ -25,12 +25,16 @@ public class Program
                 Console.WriteLine("Created CSV loader...");
 
                 // Load the data into instances of the Record class
-                var nameRecords = loader.LoadCsv<NameBasicsRecord>(nameBasicsTsv, 1000);
+                var nameRecords = loader.LoadCsv<NameBasicsRecord>(nameBasicsTsv, 50000);
                 Console.WriteLine($"Loaded {nameRecords.Count} records from {nameRecords}TSV file...");
 
+                int recordNumber = 0;
                 //------------------ NameBasicsRecord ------------------
                 foreach (var record in nameRecords)
                 {
+                    recordNumber++;
+                    Console.WriteLine($"Processing nameRecord {recordNumber}...");
+
                     var person = new Person
                     {
                         Nconst = record.nconst,
@@ -67,16 +71,44 @@ public class Program
 
                         context.PersonalCareers.Add(personalCareer);
                     }
-                }                
+
+                    var knownForTitles = record.knownForTitles.Split(',');
+
+                    foreach (var tconst in knownForTitles)
+                    {
+                        // Look for the movie in the local context
+                        var movie = context.MovieBases.Local.FirstOrDefault(m => m.Tconst == tconst);
+
+                        if (movie == null)
+                        {
+                            // Look for the movie in the database
+                            movie = context.MovieBases.FirstOrDefault(m => m.Tconst == tconst);
+                        }
+
+                        if (movie != null)
+                        {
+                            var blockBuster = new BlockBuster
+                            {
+                                Person = person,
+                                MovieBase = movie
+                            };
+
+                            context.PersonalBlockbusters.Add(blockBuster);
+                        }
+                    }
+                }
 
 
-                var titleRecords = loader.LoadCsv<TitleBasicsRecord>(titleBasicsTsv, 1000);
+                var titleRecords = loader.LoadCsv<TitleBasicsRecord>(titleBasicsTsv, 50000);
                 Console.WriteLine($"Loaded {titleRecords.Count} records from {titleRecords}TSV file...");
 
 
                 //------------------ TitleBasicsRecord ------------------
                 foreach (var record in titleRecords)
                 {
+                    recordNumber++;
+                    Console.WriteLine($"Processing titleRecord {recordNumber}...");
+
                     var movieBase = new MovieBase
                     {
                         Tconst = record.tconst,
