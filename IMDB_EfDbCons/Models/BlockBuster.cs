@@ -35,5 +35,5 @@ namespace IMDB_EfDbCons.Models
 ///Hvis tabellen PersonalBlockbusters primært fungerer som en sammenkædningstabel (junction table)
 ///uden at have egne attributter ud over fremmednøglerne, kan det være en god idé at overveje at gøre den keyless.
 ///Dette er især relevant, hvis dataene i denne tabel primært repræsenterer relationer
-///og ikke indeholder signifikante egenskaber, som du vil gemme.
+///og ikke indeholder signifikante egenskaber, som skal gemmes.
 

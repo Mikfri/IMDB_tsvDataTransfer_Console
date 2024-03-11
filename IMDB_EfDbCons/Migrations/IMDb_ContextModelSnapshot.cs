@@ -37,13 +37,23 @@ namespace IMDB_EfDbCons.Migrations
                     b.ToTable("PersonalBlockbusters");
                 });
 
+            modelBuilder.Entity("IMDB_EfDbCons.Models.Genre", b =>
+                {
+                    b.Property<string>("GenreType")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("GenreType");
+
+                    b.ToTable("Genres");
+                });
+
             modelBuilder.Entity("IMDB_EfDbCons.Models.MovieBase", b =>
                 {
                     b.Property<string>("Tconst")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("EndYear")
-                        .HasColumnType("int");
+                    b.Property<DateOnly?>("EndYear")
+                        .HasColumnType("date");
 
                     b.Property<bool>("IsAdult")
                         .HasColumnType("bit");
@@ -58,16 +68,33 @@ namespace IMDB_EfDbCons.Migrations
                     b.Property<int?>("RuntimeMins")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StartYear")
-                        .HasColumnType("int");
+                    b.Property<DateOnly?>("StartYear")
+                        .HasColumnType("date");
 
-                    b.Property<string>("TitleType")
+                    b.Property<string>("TitleTypeType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Tconst");
 
+                    b.HasIndex("TitleTypeType");
+
                     b.ToTable("MovieBases");
+                });
+
+            modelBuilder.Entity("IMDB_EfDbCons.Models.MovieGenre", b =>
+                {
+                    b.Property<string>("Tconst")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("GenreType")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Tconst", "GenreType");
+
+                    b.HasIndex("GenreType");
+
+                    b.ToTable("MovieGenres");
                 });
 
             modelBuilder.Entity("IMDB_EfDbCons.Models.Person", b =>
@@ -115,6 +142,16 @@ namespace IMDB_EfDbCons.Migrations
                     b.ToTable("Professions");
                 });
 
+            modelBuilder.Entity("IMDB_EfDbCons.Models.TitleType", b =>
+                {
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Type");
+
+                    b.ToTable("TitleTypes");
+                });
+
             modelBuilder.Entity("IMDB_EfDbCons.Models.BlockBuster", b =>
                 {
                     b.HasOne("IMDB_EfDbCons.Models.Person", "Person")
@@ -134,6 +171,36 @@ namespace IMDB_EfDbCons.Migrations
                     b.Navigation("Person");
                 });
 
+            modelBuilder.Entity("IMDB_EfDbCons.Models.MovieBase", b =>
+                {
+                    b.HasOne("IMDB_EfDbCons.Models.TitleType", "TitleType")
+                        .WithMany()
+                        .HasForeignKey("TitleTypeType")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TitleType");
+                });
+
+            modelBuilder.Entity("IMDB_EfDbCons.Models.MovieGenre", b =>
+                {
+                    b.HasOne("IMDB_EfDbCons.Models.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreType")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IMDB_EfDbCons.Models.MovieBase", "MovieBase")
+                        .WithMany("MovieGenres")
+                        .HasForeignKey("Tconst")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Genre");
+
+                    b.Navigation("MovieBase");
+                });
+
             modelBuilder.Entity("IMDB_EfDbCons.Models.PersonalCareer", b =>
                 {
                     b.HasOne("IMDB_EfDbCons.Models.Person", "Person")
@@ -151,6 +218,11 @@ namespace IMDB_EfDbCons.Migrations
                     b.Navigation("Person");
 
                     b.Navigation("Profession");
+                });
+
+            modelBuilder.Entity("IMDB_EfDbCons.Models.MovieBase", b =>
+                {
+                    b.Navigation("MovieGenres");
                 });
 
             modelBuilder.Entity("IMDB_EfDbCons.Models.Person", b =>
