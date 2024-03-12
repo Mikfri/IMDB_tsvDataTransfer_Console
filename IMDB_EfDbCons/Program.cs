@@ -3,6 +3,7 @@ using IMDB_EfDbCons.Insertions;
 using IMDB_EfDbCons.Models;
 using IMDB_EfDbCons.Records;
 using System;
+using System.Diagnostics;
 
 public class Program
 {
@@ -13,7 +14,7 @@ public class Program
         
 
         Console.WriteLine("Starting program...");
-
+        Stopwatch sw = Stopwatch.StartNew();
 
         try
         {
@@ -25,15 +26,26 @@ public class Program
                 Console.WriteLine("Created CSV loader...");
 
                 // Load the data into instances of the Record class
-                var nameRecords = loader.LoadCsv<NameBasicsRecord>(nameBasicsTsv, 50000);
-                Console.WriteLine($"Loaded {nameRecords.Count} records from {nameRecords}TSV file...");
+                var nameRecords = loader.LoadCsv<NameBasicsRecord>(nameBasicsTsv, 10000);
+                Console.WriteLine($"Loaded {nameRecords.Count} records from {nameBasicsTsv} TSV file...");
 
-                int recordNumber = 0;
+                var titleRecords = loader.LoadCsv<TitleBasicsRecord>(titleBasicsTsv, 10000);
+                Console.WriteLine($"Loaded {titleRecords.Count} records from {titleBasicsTsv} TSV file...");
+
+                // Create caches for professions, movies, and genres
+                var professionsCache = new Dictionary<string, Profession>();
+                var moviesCache = new Dictionary<string, MovieBase>();
+                var genresCache = new Dictionary<string, Genre>();
+
+                int nameRecordNumber = 0;
+                int titleRecordNumber = 0;
+                int batchSize = 500; // Adjust this value based on your performance measurements
+
                 //------------------ NameBasicsRecord ------------------
                 foreach (var record in nameRecords)
                 {
-                    recordNumber++;
-                    Console.WriteLine($"Processing nameRecord {recordNumber}...");
+                    nameRecordNumber++;
+                    Console.WriteLine($"Processing nameRecord {nameRecordNumber}...");
 
                     var person = new Person
                     {
@@ -47,20 +59,15 @@ public class Program
 
                     foreach (var professionName in professions)
                     {
-                        // Look for the profession in the local context
-                        var profession = context.Professions.Local.FirstOrDefault(p => p.PrimaryProfession == professionName);
-
-                        if (profession == null)
+                        // Look for the profession in the cache
+                        if (!professionsCache.TryGetValue(professionName, out var profession))
                         {
-                            // Look for the profession in the database
-                            profession = context.Professions.FirstOrDefault(p => p.PrimaryProfession == professionName);
-                        }
-
-                        if (profession == null)
-                        {
-                            // If the profession is not found, create a new instance
+                            // If the profession is not found in the cache, create a new instance
                             profession = new Profession { PrimaryProfession = professionName };
                             context.Professions.Add(profession);
+
+                            // Add the new profession to the cache
+                            professionsCache[professionName] = profession;
                         }
 
                         var personalCareer = new PersonalCareer
@@ -76,16 +83,8 @@ public class Program
 
                     foreach (var tconst in knownForTitles)
                     {
-                        // Look for the movie in the local context
-                        var movie = context.MovieBases.Local.FirstOrDefault(m => m.Tconst == tconst);
-
-                        if (movie == null)
-                        {
-                            // Look for the movie in the database
-                            movie = context.MovieBases.FirstOrDefault(m => m.Tconst == tconst);
-                        }
-
-                        if (movie != null)
+                        // Look for the movie in the cache
+                        if (moviesCache.TryGetValue(tconst, out var movie))
                         {
                             var blockBuster = new BlockBuster
                             {
@@ -96,18 +95,21 @@ public class Program
                             context.PersonalBlockbusters.Add(blockBuster);
                         }
                     }
+
+                    // Save changes every batchSize records
+                    if (nameRecordNumber % batchSize == 0)
+                    {
+                        context.SaveChanges();
+                        Console.WriteLine($"Saved changes for {nameRecordNumber} nameRecords...");
+                    }
                 }
-
-
-                var titleRecords = loader.LoadCsv<TitleBasicsRecord>(titleBasicsTsv, 50000);
-                Console.WriteLine($"Loaded {titleRecords.Count} records from {titleRecords}TSV file...");
 
 
                 //------------------ TitleBasicsRecord ------------------
                 foreach (var record in titleRecords)
                 {
-                    recordNumber++;
-                    Console.WriteLine($"Processing titleRecord {recordNumber}...");
+                    titleRecordNumber++;
+                    Console.WriteLine($"Processing titleRecord {titleRecordNumber}...");
 
                     var movieBase = new MovieBase
                     {
@@ -133,25 +135,20 @@ public class Program
                     }
 
                     movieBase.TitleType = titleType;
-                   
+
                     var genres = record.genres.Split(',');
 
                     foreach (var genreType in genres)
                     {
-                        // Look for the genre in the local context
-                        var genre = context.Genres.Local.FirstOrDefault(g => g.GenreType == genreType);
-
-                        if (genre == null)
+                        // Look for the genre in the cache
+                        if (!genresCache.TryGetValue(genreType, out var genre))
                         {
-                            // Look for the genre in the database
-                            genre = context.Genres.FirstOrDefault(g => g.GenreType == genreType);
-                        }
-
-                        if (genre == null)
-                        {
-                            // If the genre is not found, create a new instance
+                            // If the genre is not found in the cache, create a new instance
                             genre = new Genre { GenreType = genreType };
                             context.Genres.Add(genre);
+
+                            // Add the new genre to the cache
+                            genresCache[genreType] = genre;
                         }
 
                         var movieGenre = new MovieGenre
@@ -162,11 +159,15 @@ public class Program
 
                         context.MovieGenres.Add(movieGenre);
                     }
-                }// foreaches ends here
 
-                context.SaveChanges();
-                Console.WriteLine("Saved changes to context...");
-
+                    // Save changes every batchSize records
+                    if (titleRecordNumber % batchSize == 0)
+                    {
+                        context.SaveChanges();
+                        Console.WriteLine($"Saved changes for {titleRecordNumber} titleRecords...");
+                    }
+                }
+                // foreaches ends here
             }// using context ends here
         }
         catch (Exception ex)
@@ -174,6 +175,9 @@ public class Program
             Console.WriteLine($"An error occurred: {ex.Message}");
             Console.WriteLine($"Stack trace: {ex.StackTrace}");
         }
+
+        sw.Stop();
+        Console.WriteLine($"Total time elapsed: {sw.Elapsed}");
 
         Console.WriteLine("Ending program...");
     }
