@@ -37,6 +37,8 @@ namespace IMDB_EfDbCons.Models
 
 
         public ICollection<MovieGenre> MovieGenres { get; set; } = new List<MovieGenre>();
+        public ICollection<Director> Directors { get; set; } = new List<Director>();
+        public ICollection<Writer> Writers { get; set; } = new List<Writer>();
 
 
         public MovieBase() { }

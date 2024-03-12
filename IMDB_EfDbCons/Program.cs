@@ -1,4 +1,5 @@
-﻿using IMDB_EfDbCons.DataContext;
+﻿using EFCore.BulkExtensions;
+using IMDB_EfDbCons.DataContext;
 using IMDB_EfDbCons.Insertions;
 using IMDB_EfDbCons.Models;
 using IMDB_EfDbCons.Records;
@@ -11,7 +12,7 @@ public class Program
     {
         string nameBasicsTsv = @"C:\Users\mikkf\OneDrive\Dokumenter\Visual Studio 2022\TSVs\name.basics.tsv\data.tsv";
         string titleBasicsTsv = @"C:\Users\mikkf\OneDrive\Dokumenter\Visual Studio 2022\TSVs\title.basics.tsv\data.tsv";
-        
+        string titleCrewTsv = @"C:\Users\mikkf\OneDrive\Dokumenter\Visual Studio 2022\TSVs\title.crew.tsv\data.tsv";
 
         Console.WriteLine("Starting program...");
         Stopwatch sw = Stopwatch.StartNew();
@@ -26,149 +27,28 @@ public class Program
                 Console.WriteLine("Created CSV loader...");
 
                 // Load the data into instances of the Record class
-                var nameRecords = loader.LoadCsv<NameBasicsRecord>(nameBasicsTsv, 10000);
+                var nameRecords = loader.LoadCsv<NameBasicsRecord>(nameBasicsTsv, 50000);
                 Console.WriteLine($"Loaded {nameRecords.Count} records from {nameBasicsTsv} TSV file...");
 
-                var titleRecords = loader.LoadCsv<TitleBasicsRecord>(titleBasicsTsv, 10000);
+                var titleRecords = loader.LoadCsv<TitleBasicsRecord>(titleBasicsTsv, 50000);
                 Console.WriteLine($"Loaded {titleRecords.Count} records from {titleBasicsTsv} TSV file...");
 
-                // Create caches for professions, movies, and genres
-                var professionsCache = new Dictionary<string, Profession>();
-                var moviesCache = new Dictionary<string, MovieBase>();
-                var genresCache = new Dictionary<string, Genre>();
+                // Process NameBasicsRecords and create Persons, Professions, PersonalCareers, and PersonalBlockbusters
+                var (persons, professions, personalCareers, personalBlockbusters) = ProcessNameBasicsRecords(nameRecords);
 
-                int nameRecordNumber = 0;
-                int titleRecordNumber = 0;
-                int batchSize = 500; // Adjust this value based on your performance measurements
+                // Process TitleBasicsRecords and create MovieBases, TitleTypes, Genres, and MovieGenres
+                var (movieBases, titleTypes, genres, movieGenres) = ProcessTitleBasicsRecords(titleRecords);
 
-                //------------------ NameBasicsRecord ------------------
-                foreach (var record in nameRecords)
-                {
-                    nameRecordNumber++;
-                    Console.WriteLine($"Processing nameRecord {nameRecordNumber}...");
-
-                    var person = new Person
-                    {
-                        Nconst = record.nconst,
-                        PrimaryName = record.primaryName,
-                        BirthYear = int.TryParse(record.birthYear, out int birthYear) ? new DateOnly(birthYear, 1, 1) : DateOnly.MinValue,
-                        DeathYear = int.TryParse(record.deathYear, out int deathYear) ? new DateOnly(deathYear, 1, 1) : DateOnly.MinValue
-                    };
-
-                    var professions = record.primaryProfession.Split(',');
-
-                    foreach (var professionName in professions)
-                    {
-                        // Look for the profession in the cache
-                        if (!professionsCache.TryGetValue(professionName, out var profession))
-                        {
-                            // If the profession is not found in the cache, create a new instance
-                            profession = new Profession { PrimaryProfession = professionName };
-                            context.Professions.Add(profession);
-
-                            // Add the new profession to the cache
-                            professionsCache[professionName] = profession;
-                        }
-
-                        var personalCareer = new PersonalCareer
-                        {
-                            Person = person,
-                            Profession = profession
-                        };
-
-                        context.PersonalCareers.Add(personalCareer);
-                    }
-
-                    var knownForTitles = record.knownForTitles.Split(',');
-
-                    foreach (var tconst in knownForTitles)
-                    {
-                        // Look for the movie in the cache
-                        if (moviesCache.TryGetValue(tconst, out var movie))
-                        {
-                            var blockBuster = new BlockBuster
-                            {
-                                Person = person,
-                                MovieBase = movie
-                            };
-
-                            context.PersonalBlockbusters.Add(blockBuster);
-                        }
-                    }
-
-                    // Save changes every batchSize records
-                    if (nameRecordNumber % batchSize == 0)
-                    {
-                        context.SaveChanges();
-                        Console.WriteLine($"Saved changes for {nameRecordNumber} nameRecords...");
-                    }
-                }
-
-
-                //------------------ TitleBasicsRecord ------------------
-                foreach (var record in titleRecords)
-                {
-                    titleRecordNumber++;
-                    Console.WriteLine($"Processing titleRecord {titleRecordNumber}...");
-
-                    var movieBase = new MovieBase
-                    {
-                        Tconst = record.tconst,
-                        PrimaryTitle = record.primaryTitle,
-                        OriginalTitle = record.originalTitle,
-                        IsAdult = record.isAdult,
-                        StartYear = int.TryParse(record.startYear, out int startYear) ? new DateOnly(startYear, 1, 1) : DateOnly.MinValue,
-                        EndYear = int.TryParse(record.endYear, out int endYear) ? new DateOnly(endYear, 1, 1) : DateOnly.MinValue,
-                        RuntimeMins = int.TryParse(record.runtimeMinutes, out int runtimeMins) ? runtimeMins : 0
-                    };
-
-                    var titleType = context.TitleTypes.Local.FirstOrDefault(tt => tt.Type == record.titleType);
-                    if (titleType == null)
-                    {
-                        titleType = context.TitleTypes.FirstOrDefault(tt => tt.Type == record.titleType);
-                    }
-
-                    if (titleType == null)
-                    {
-                        titleType = new TitleType { Type = record.titleType };
-                        context.TitleTypes.Add(titleType);
-                    }
-
-                    movieBase.TitleType = titleType;
-
-                    var genres = record.genres.Split(',');
-
-                    foreach (var genreType in genres)
-                    {
-                        // Look for the genre in the cache
-                        if (!genresCache.TryGetValue(genreType, out var genre))
-                        {
-                            // If the genre is not found in the cache, create a new instance
-                            genre = new Genre { GenreType = genreType };
-                            context.Genres.Add(genre);
-
-                            // Add the new genre to the cache
-                            genresCache[genreType] = genre;
-                        }
-
-                        var movieGenre = new MovieGenre
-                        {
-                            MovieBase = movieBase,
-                            Genre = genre
-                        };
-
-                        context.MovieGenres.Add(movieGenre);
-                    }
-
-                    // Save changes every batchSize records
-                    if (titleRecordNumber % batchSize == 0)
-                    {
-                        context.SaveChanges();
-                        Console.WriteLine($"Saved changes for {titleRecordNumber} titleRecords...");
-                    }
-                }
-                // foreaches ends here
-            }// using context ends here
+                // Use BulkInsert to insert the records for each table in bulk
+                context.BulkInsert(persons);
+                context.BulkInsert(professions);
+                context.BulkInsert(personalCareers);
+                context.BulkInsert(personalBlockbusters);
+                context.BulkInsert(movieBases);
+                context.BulkInsert(titleTypes);
+                context.BulkInsert(genres);
+                context.BulkInsert(movieGenres);
+            }
         }
         catch (Exception ex)
         {
@@ -180,7 +60,119 @@ public class Program
         Console.WriteLine($"Total time elapsed: {sw.Elapsed}");
 
         Console.WriteLine("Ending program...");
+
+        static DateOnly? TryParseDate(string dateValue)
+        {
+            if (dateValue.Equals("\\N", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            // Hvis datoen er i formatet "yyyy-mm-dd"
+            if (DateTime.TryParseExact(dateValue, "yyyy", null, System.Globalization.DateTimeStyles.None, out var dateTime))
+            {
+                return new DateOnly(dateTime.Year, 1, 1);
+            }
+
+            Console.WriteLine($"Fejl ved konvertering af dato: {dateValue}");
+
+            return null;
+        }
+
+        static (List<Person>, HashSet<Profession>, List<PersonalCareer>, List<BlockBuster>) ProcessNameBasicsRecords(List<NameBasicsRecord> nameRecords)
+        {
+            var persons = new List<Person>();
+            var professions = new Dictionary<string, Profession>();
+            var personalCareers = new List<PersonalCareer>();
+            var personalBlockbusters = new List<BlockBuster>();
+
+            foreach (var record in nameRecords)
+            {
+                var person = new Person
+                {
+                    Nconst = record.nconst,
+                    PrimaryName = record.primaryName,
+                    BirthYear = TryParseDate(record.birthYear),
+                    DeathYear = TryParseDate(record.deathYear)
+                };
+                persons.Add(person);
+
+                if (!string.IsNullOrEmpty(record.primaryProfession))
+                {
+                    var professionTypes = record.primaryProfession.Split(',');
+                    foreach (var professionType in professionTypes)
+                    {
+                        if (!professions.ContainsKey(professionType))
+                        {
+                            var profession = new Profession { PrimaryProfession = professionType };
+                            professions.Add(professionType, profession);
+                        }
+
+                        var personalCareer = new PersonalCareer { Nconst = record.nconst, PrimProf = professionType };
+                        personalCareers.Add(personalCareer);
+                    }
+                }
+
+                var tconsts = record.knownForTitles.Split(',');
+                foreach (var tconst in tconsts)
+                {
+                    var blockBuster = new BlockBuster { Nconst = record.nconst, Tconst = tconst };
+                    personalBlockbusters.Add(blockBuster);
+                }
+            }
+
+            return (persons, new HashSet<Profession>(professions.Values), personalCareers, personalBlockbusters);
+        }
+
+
+        static (List<MovieBase>, List<TitleType>, List<Genre>, List<MovieGenre>) ProcessTitleBasicsRecords(List<TitleBasicsRecord> titleRecords)
+        {
+            var movieBases = new List<MovieBase>();
+            var titleTypes = new Dictionary<string, TitleType>();
+            var genres = new Dictionary<string, Genre>();
+            var movieGenres = new List<MovieGenre>();
+
+            foreach (var record in titleRecords)
+            {
+                var movieBase = new MovieBase
+                {
+                    Tconst = record.tconst,
+                    TitleType = new TitleType { Type = record.titleType },
+                    PrimaryTitle = record.primaryTitle,
+                    OriginalTitle = record.originalTitle,
+                    IsAdult = record.isAdult,
+                    StartYear = TryParseDate(record.startYear),
+                    EndYear = TryParseDate(record.endYear),
+                    RuntimeMins = int.TryParse(record.runtimeMinutes, out var runtime) ? runtime : (int?)null
+                };
+                movieBases.Add(movieBase);
+
+                if (!titleTypes.ContainsKey(record.titleType))
+                {
+                    var titleType = new TitleType { Type = record.titleType };
+                    titleTypes.Add(record.titleType, titleType);
+                }
+
+                var genreTypes = record.genres.Split(',');
+                foreach (var genreType in genreTypes)
+                {
+                    if (!genres.ContainsKey(genreType))
+                    {
+                        var genre = new Genre { GenreType = genreType };
+                        genres.Add(genreType, genre);
+                    }
+
+                    var movieGenre = new MovieGenre { Tconst = record.tconst, GenreType = genreType };
+                    movieGenres.Add(movieGenre);
+                }
+            }
+
+            return (movieBases, new List<TitleType>(titleTypes.Values), new List<Genre>(genres.Values), movieGenres);
+        }
     }
+
+
+
 
 }
 

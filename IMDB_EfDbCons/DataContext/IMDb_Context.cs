@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,12 +20,7 @@ namespace IMDB_EfDbCons.DataContext
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(
-                    @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=IMDb_DB; Integrated Security=True;",
-                    options => // ekstra del for timeout
-                    {
-                        options.EnableRetryOnFailure();
-                        options.CommandTimeout(360);
-                    });
+                    @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=IMDb_DB; Integrated Security=True;");                   
             }
         }
         
@@ -73,6 +69,34 @@ namespace IMDB_EfDbCons.DataContext
                 .HasOne(mg => mg.Genre)             // en MovieGenre har en Genre
                 .WithMany()
                 .HasForeignKey(mg => mg.GenreType); // en MovieGenre har en fremmednøgle GenreType
+
+            //-------------------Configuration for the relationship between MovieBase and Director-------------------
+            modelBuilder.Entity<Director>()
+                .HasKey(d => new { d.Tconst, d.Nconst });
+
+            modelBuilder.Entity<Director>()
+                .HasOne(d => d.MovieBase)       // en Director har en MovieBase
+                .WithMany(mb => mb.Directors)   // en MovieBase har mange Directors
+                .HasForeignKey(d => d.Tconst);  // en Director har en fremmednøgle Tconst
+
+            modelBuilder.Entity<Director>()
+                .HasOne(d => d.Person)          // en Director har en Person
+                .WithMany(p => p.Directors)     // en Person har mange Directors
+                .HasForeignKey(d => d.Nconst);  // en Director har en fremmednøgle Nconst
+
+            //-------------------Configuration for the relationship between MovieBase and Writer-------------------
+            modelBuilder.Entity<Writer>()
+                .HasKey(w => new { w.Tconst, w.Nconst });
+
+            modelBuilder.Entity<Writer>()
+                .HasOne(w => w.MovieBase)
+                .WithMany(mb => mb.Writers)
+                .HasForeignKey(w => w.Tconst);
+
+            modelBuilder.Entity<Writer>()
+                .HasOne(w => w.Person)
+                .WithMany(p => p.Writers)
+                .HasForeignKey(w => w.Nconst);
         }
 
         //--------- title.basics.tsv ---------
@@ -87,5 +111,9 @@ namespace IMDB_EfDbCons.DataContext
         public DbSet<Profession> Professions { get; set; }
         public DbSet<PersonalCareer> PersonalCareers { get; set; }
         public DbSet<BlockBuster> PersonalBlockbusters { get; set; }
+
+        //--------- title.crew.tsv ---------
+        public DbSet<Director> Directors { get; set; }
+        public DbSet<Writer> Writers { get; set; }
     }
 }
