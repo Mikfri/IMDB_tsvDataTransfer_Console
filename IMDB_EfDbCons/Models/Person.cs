@@ -27,9 +27,10 @@ namespace IMDB_EfDbCons.Models
 
         public ICollection<BlockBuster> BlockBusters { get; set; } = new List<BlockBuster>();
         public ICollection<PersonalCareer> PersonalCareers { get; set; } = new List<PersonalCareer>();
-        public ICollection<Director> Directors { get; set; } = new List<Director>();
-        public ICollection<Writer> Writers { get; set; } = new List<Writer>();
-                      
+        public ICollection<MovieDirector> Directors { get; set; } = new List<MovieDirector>();
+        public ICollection<MovieWriter> Writers { get; set; } = new List<MovieWriter>();
+
+
 
         public Person() { }
 

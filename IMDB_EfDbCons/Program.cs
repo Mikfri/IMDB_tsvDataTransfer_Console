@@ -33,21 +33,31 @@ public class Program
                 var titleRecords = loader.LoadCsv<TitleBasicsRecord>(titleBasicsTsv, 50000);
                 Console.WriteLine($"Loaded {titleRecords.Count} records from {titleBasicsTsv} TSV file...");
 
+                var titleCrewRecords = loader.LoadCsv<TitleCrewRecord>(titleCrewTsv, 50000);
+                Console.WriteLine($"Loaded {titleCrewRecords.Count} records from {titleCrewTsv} TSV file...");
+
                 // Process NameBasicsRecords and create Persons, Professions, PersonalCareers, and PersonalBlockbusters
                 var (persons, professions, personalCareers, personalBlockbusters) = ProcessNameBasicsRecords(nameRecords);
 
                 // Process TitleBasicsRecords and create MovieBases, TitleTypes, Genres, and MovieGenres
                 var (movieBases, titleTypes, genres, movieGenres) = ProcessTitleBasicsRecords(titleRecords);
 
+                // Process TitleCrewRecords and create Directors and Writers
+                var (directors, writers) = ProcessTitleCrewRecords(titleCrewRecords);
+
                 // Use BulkInsert to insert the records for each table in bulk
                 context.BulkInsert(persons);
                 context.BulkInsert(professions);
                 context.BulkInsert(personalCareers);
                 context.BulkInsert(personalBlockbusters);
+                //movieBase.tsv
                 context.BulkInsert(movieBases);
                 context.BulkInsert(titleTypes);
                 context.BulkInsert(genres);
                 context.BulkInsert(movieGenres);
+                //titleCrew.tsv
+                context.BulkInsert(directors);
+                context.BulkInsert(writers);
             }
         }
         catch (Exception ex)
@@ -169,6 +179,39 @@ public class Program
 
             return (movieBases, new List<TitleType>(titleTypes.Values), new List<Genre>(genres.Values), movieGenres);
         }
+
+        static (List<MovieDirector>, List<MovieWriter>) ProcessTitleCrewRecords(List<TitleCrewRecord> titleCrewRecords)
+        {
+            var directors = new List<MovieDirector>();
+            var writers = new List<MovieWriter>();
+
+            foreach (var record in titleCrewRecords)
+            {
+                if (!string.IsNullOrEmpty(record.directors))
+                {
+                    var directorIds = record.directors.Split(',');
+                    foreach (var directorId in directorIds)
+                    {
+                        var director = new MovieDirector { Tconst = record.tconst, Nconst = directorId };
+                        directors.Add(director);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(record.writers))
+                {
+                    var writerIds = record.writers.Split(',');
+                    foreach (var writerId in writerIds)
+                    {
+                        var writer = new MovieWriter { Tconst = record.tconst, Nconst = writerId };
+                        writers.Add(writer);
+                    }
+                }
+            }
+
+            return (directors, writers);
+        }
+
+
     }
 
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IMDB_EfDbCons.Records
 {
-    public class titleCrewBasicsRecord
+    public class TitleCrewRecord
     {
         public string tconst { get; set; }
         public string directors { get; set; }

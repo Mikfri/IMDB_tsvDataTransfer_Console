@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IMDB_EfDbCons.Migrations
 {
     [DbContext(typeof(IMDb_Context))]
-    [Migration("20240311122733_Imdb01")]
-    partial class Imdb01
+    [Migration("20240313160943_IMDb_01")]
+    partial class IMDb_01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -85,6 +85,21 @@ namespace IMDB_EfDbCons.Migrations
                     b.ToTable("MovieBases");
                 });
 
+            modelBuilder.Entity("IMDB_EfDbCons.Models.MovieDirector", b =>
+                {
+                    b.Property<string>("Tconst")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Nconst")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Tconst", "Nconst");
+
+                    b.HasIndex("Nconst");
+
+                    b.ToTable("Directors");
+                });
+
             modelBuilder.Entity("IMDB_EfDbCons.Models.MovieGenre", b =>
                 {
                     b.Property<string>("Tconst")
@@ -98,6 +113,21 @@ namespace IMDB_EfDbCons.Migrations
                     b.HasIndex("GenreType");
 
                     b.ToTable("MovieGenres");
+                });
+
+            modelBuilder.Entity("IMDB_EfDbCons.Models.MovieWriter", b =>
+                {
+                    b.Property<string>("Tconst")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Nconst")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Tconst", "Nconst");
+
+                    b.HasIndex("Nconst");
+
+                    b.ToTable("Writers");
                 });
 
             modelBuilder.Entity("IMDB_EfDbCons.Models.Person", b =>
@@ -185,6 +215,25 @@ namespace IMDB_EfDbCons.Migrations
                     b.Navigation("TitleType");
                 });
 
+            modelBuilder.Entity("IMDB_EfDbCons.Models.MovieDirector", b =>
+                {
+                    b.HasOne("IMDB_EfDbCons.Models.Person", "Person")
+                        .WithMany("Directors")
+                        .HasForeignKey("Nconst")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IMDB_EfDbCons.Models.MovieBase", "MovieBase")
+                        .WithMany("Directors")
+                        .HasForeignKey("Tconst")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MovieBase");
+
+                    b.Navigation("Person");
+                });
+
             modelBuilder.Entity("IMDB_EfDbCons.Models.MovieGenre", b =>
                 {
                     b.HasOne("IMDB_EfDbCons.Models.Genre", "Genre")
@@ -202,6 +251,25 @@ namespace IMDB_EfDbCons.Migrations
                     b.Navigation("Genre");
 
                     b.Navigation("MovieBase");
+                });
+
+            modelBuilder.Entity("IMDB_EfDbCons.Models.MovieWriter", b =>
+                {
+                    b.HasOne("IMDB_EfDbCons.Models.Person", "Person")
+                        .WithMany("Writers")
+                        .HasForeignKey("Nconst")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IMDB_EfDbCons.Models.MovieBase", "MovieBase")
+                        .WithMany("Writers")
+                        .HasForeignKey("Tconst")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MovieBase");
+
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("IMDB_EfDbCons.Models.PersonalCareer", b =>
@@ -225,14 +293,22 @@ namespace IMDB_EfDbCons.Migrations
 
             modelBuilder.Entity("IMDB_EfDbCons.Models.MovieBase", b =>
                 {
+                    b.Navigation("Directors");
+
                     b.Navigation("MovieGenres");
+
+                    b.Navigation("Writers");
                 });
 
             modelBuilder.Entity("IMDB_EfDbCons.Models.Person", b =>
                 {
                     b.Navigation("BlockBusters");
 
+                    b.Navigation("Directors");
+
                     b.Navigation("PersonalCareers");
+
+                    b.Navigation("Writers");
                 });
 #pragma warning restore 612, 618
         }

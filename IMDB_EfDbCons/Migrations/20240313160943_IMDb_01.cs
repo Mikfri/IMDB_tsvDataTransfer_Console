@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace IMDB_EfDbCons.Migrations
 {
     /// <inheritdoc />
-    public partial class Imdb01 : Migration
+    public partial class IMDb_01 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -107,6 +107,30 @@ namespace IMDB_EfDbCons.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Directors",
+                columns: table => new
+                {
+                    Tconst = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Nconst = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Directors", x => new { x.Tconst, x.Nconst });
+                    table.ForeignKey(
+                        name: "FK_Directors_MovieBases_Tconst",
+                        column: x => x.Tconst,
+                        principalTable: "MovieBases",
+                        principalColumn: "Tconst",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Directors_Persons_Nconst",
+                        column: x => x.Nconst,
+                        principalTable: "Persons",
+                        principalColumn: "Nconst",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MovieGenres",
                 columns: table => new
                 {
@@ -154,6 +178,35 @@ namespace IMDB_EfDbCons.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Writers",
+                columns: table => new
+                {
+                    Tconst = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Nconst = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Writers", x => new { x.Tconst, x.Nconst });
+                    table.ForeignKey(
+                        name: "FK_Writers_MovieBases_Tconst",
+                        column: x => x.Tconst,
+                        principalTable: "MovieBases",
+                        principalColumn: "Tconst",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Writers_Persons_Nconst",
+                        column: x => x.Nconst,
+                        principalTable: "Persons",
+                        principalColumn: "Nconst",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Directors_Nconst",
+                table: "Directors",
+                column: "Nconst");
+
             migrationBuilder.CreateIndex(
                 name: "IX_MovieBases_TitleTypeType",
                 table: "MovieBases",
@@ -173,11 +226,19 @@ namespace IMDB_EfDbCons.Migrations
                 name: "IX_PersonalCareers_PrimProf",
                 table: "PersonalCareers",
                 column: "PrimProf");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Writers_Nconst",
+                table: "Writers",
+                column: "Nconst");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Directors");
+
             migrationBuilder.DropTable(
                 name: "MovieGenres");
 
@@ -188,16 +249,19 @@ namespace IMDB_EfDbCons.Migrations
                 name: "PersonalCareers");
 
             migrationBuilder.DropTable(
+                name: "Writers");
+
+            migrationBuilder.DropTable(
                 name: "Genres");
+
+            migrationBuilder.DropTable(
+                name: "Professions");
 
             migrationBuilder.DropTable(
                 name: "MovieBases");
 
             migrationBuilder.DropTable(
                 name: "Persons");
-
-            migrationBuilder.DropTable(
-                name: "Professions");
 
             migrationBuilder.DropTable(
                 name: "TitleTypes");
