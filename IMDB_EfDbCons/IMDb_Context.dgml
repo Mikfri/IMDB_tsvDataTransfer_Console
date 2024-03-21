@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph GraphDirection="LeftToRight" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+<Node Id="IModel" Label="IMDb_Context" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot" PropertyAccessMode="PropertyAccessMode.Default" ProductVersion="8.0.3" Annotations="BaseTypeDiscoveryConvention:DerivedTypes: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.List`1[Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType]]
+Relational:MaxIdentifierLength: 128
+RelationshipDiscoveryConvention:InverseNavigationCandidates: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]
+SqlServer:ValueGenerationStrategy: IdentityColumn" Category="Model" Group="Expanded" />
+<Node Id = "BlockBuster" Label="BlockBuster" Name="BlockBuster" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: PersonalBlockbusters
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Genre" Label="Genre" Name="Genre" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: Genres
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "BlockBuster.Nconst" Label="Nconst (string)" Name="Nconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "BlockBuster.MovieBase" Label="MovieBase (1)" Name="MovieBase" Category="Navigation Property" Type="MovieBase"  Field="" Dependent="" Principal="MovieBase" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "BlockBuster.Person" Label="Person (1)" Name="Person" Category="Navigation Property" Type="Person"  Field="" Dependent="" Principal="Person" Inverse="BlockBusters" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "BlockBuster.Tconst" Label="Tconst (string)" Name="Tconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieBase" Label="MovieBase" Name="MovieBase" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: MovieBases
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Genre.GenreType" Label="GenreType (string)" Name="GenreType" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieDirector" Label="MovieDirector" Name="MovieDirector" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: Directors
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "MovieBase.Tconst" Label="Tconst (string)" Name="Tconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieBase.Directors" Label="Directors (*)" Name="Directors" Category="Navigation Collection" Type="ICollection&lt;MovieDirector&gt;"  Field="" Dependent="MovieDirector" Principal="" Inverse="MovieBase" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "MovieBase.MovieGenres" Label="MovieGenres (*)" Name="MovieGenres" Category="Navigation Collection" Type="ICollection&lt;MovieGenre&gt;"  Field="" Dependent="MovieGenre" Principal="" Inverse="MovieBase" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "MovieBase.TitleType" Label="TitleType (1)" Name="TitleType" Category="Navigation Property" Type="TitleType"  Field="" Dependent="" Principal="TitleType" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "MovieBase.Writers" Label="Writers (*)" Name="Writers" Category="Navigation Collection" Type="ICollection&lt;MovieWriter&gt;"  Field="" Dependent="MovieWriter" Principal="" Inverse="MovieBase" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "MovieBase.EndYear" Label="EndYear (DateOnly?)" Name="EndYear" Category="Property Optional" Type="DateOnly?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieBase.IsAdult" Label="IsAdult (bool)" Name="IsAdult" Category="Property Required" Type="bool" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieBase.OriginalTitle" Label="OriginalTitle (string)" Name="OriginalTitle" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieBase.PrimaryTitle" Label="PrimaryTitle (string)" Name="PrimaryTitle" Category="Property Required" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieBase.RuntimeMins" Label="RuntimeMins (int?)" Name="RuntimeMins" Category="Property Optional" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieBase.StartYear" Label="StartYear (DateOnly?)" Name="StartYear" Category="Property Optional" Type="DateOnly?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieBase.TitleTypeType" Label="TitleTypeType (string)" Name="TitleTypeType" Category="Property Foreign" Type="string" MaxLength="None" Field="nofield" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="True" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieGenre" Label="MovieGenre" Name="MovieGenre" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: MovieGenres
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "MovieDirector.Tconst" Label="Tconst (string)" Name="Tconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieDirector.MovieBase" Label="MovieBase (1)" Name="MovieBase" Category="Navigation Property" Type="MovieBase"  Field="" Dependent="" Principal="MovieBase" Inverse="Directors" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "MovieDirector.Person" Label="Person (1)" Name="Person" Category="Navigation Property" Type="Person"  Field="" Dependent="" Principal="Person" Inverse="Directors" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "MovieDirector.Nconst" Label="Nconst (string)" Name="Nconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieWriter" Label="MovieWriter" Name="MovieWriter" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: Writers
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "MovieGenre.Tconst" Label="Tconst (string)" Name="Tconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieGenre.Genre" Label="Genre (1)" Name="Genre" Category="Navigation Property" Type="Genre"  Field="" Dependent="" Principal="Genre" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "MovieGenre.MovieBase" Label="MovieBase (1)" Name="MovieBase" Category="Navigation Property" Type="MovieBase"  Field="" Dependent="" Principal="MovieBase" Inverse="MovieGenres" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "MovieGenre.GenreType" Label="GenreType (string)" Name="GenreType" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Person" Label="Person" Name="Person" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: Persons
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "MovieWriter.Tconst" Label="Tconst (string)" Name="Tconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "MovieWriter.MovieBase" Label="MovieBase (1)" Name="MovieBase" Category="Navigation Property" Type="MovieBase"  Field="" Dependent="" Principal="MovieBase" Inverse="Writers" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "MovieWriter.Person" Label="Person (1)" Name="Person" Category="Navigation Property" Type="Person"  Field="" Dependent="" Principal="Person" Inverse="Writers" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "MovieWriter.Nconst" Label="Nconst (string)" Name="Nconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "PersonalCareer" Label="PersonalCareer" Name="PersonalCareer" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: PersonalCareers
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Person.Nconst" Label="Nconst (string)" Name="Nconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Person.BlockBusters" Label="BlockBusters (*)" Name="BlockBusters" Category="Navigation Collection" Type="ICollection&lt;BlockBuster&gt;"  Field="" Dependent="BlockBuster" Principal="" Inverse="Person" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Person.Directors" Label="Directors (*)" Name="Directors" Category="Navigation Collection" Type="ICollection&lt;MovieDirector&gt;"  Field="" Dependent="MovieDirector" Principal="" Inverse="Person" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Person.PersonalCareers" Label="PersonalCareers (*)" Name="PersonalCareers" Category="Navigation Collection" Type="ICollection&lt;PersonalCareer&gt;"  Field="" Dependent="PersonalCareer" Principal="" Inverse="Person" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Person.Writers" Label="Writers (*)" Name="Writers" Category="Navigation Collection" Type="ICollection&lt;MovieWriter&gt;"  Field="" Dependent="MovieWriter" Principal="" Inverse="Person" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Person.BirthYear" Label="BirthYear (DateOnly?)" Name="BirthYear" Category="Property Optional" Type="DateOnly?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Person.DeathYear" Label="DeathYear (DateOnly?)" Name="DeathYear" Category="Property Optional" Type="DateOnly?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Person.PrimaryName" Label="PrimaryName (string)" Name="PrimaryName" Category="Property Required" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Profession" Label="Profession" Name="Profession" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: Professions
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "PersonalCareer.Nconst" Label="Nconst (string)" Name="Nconst" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "PersonalCareer.Person" Label="Person (1)" Name="Person" Category="Navigation Property" Type="Person"  Field="" Dependent="" Principal="Person" Inverse="PersonalCareers" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "PersonalCareer.Profession" Label="Profession (1)" Name="Profession" Category="Navigation Property" Type="Profession"  Field="" Dependent="" Principal="Profession" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "PersonalCareer.PrimProf" Label="PrimProf (string)" Name="PrimProf" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "TitleType" Label="TitleType" Name="TitleType" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: TitleTypes
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Profession.PrimaryProfession" Label="PrimaryProfession (string)" Name="PrimaryProfession" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "TitleType" Label="TitleType" Name="TitleType" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="" Category="EntityType" Group="Expanded" />
+<Node Id = "TitleType.Type" Label="Type (string)" Name="Type" Category="Property Primary" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+  </Nodes>
+  <Links>
+<Link Source = "IModel" Target="BlockBuster" Category="Contains" />
+<Link Source = "IModel" Target="Genre" Category="Contains" />
+<Link Source = "BlockBuster" Target="BlockBuster.MovieBase" Category="Contains" />
+<Link Source = "BlockBuster" Target="BlockBuster.Person" Category="Contains" />
+<Link Source = "BlockBuster" Target="BlockBuster.Nconst" Category="Contains" />
+<Link Source="BlockBuster" Target="Person" From="BlockBuster.Nconst" To="Person.Nconst" Name="BlockBuster -> Person" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="BlockBuster" Target="MovieBase" From="BlockBuster.Tconst" To="MovieBase.Tconst" Name="BlockBuster -> MovieBase" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "BlockBuster" Target="BlockBuster.Tconst" Category="Contains" />
+<Link Source = "IModel" Target="MovieBase" Category="Contains" />
+<Link Source = "Genre" Target="Genre.GenreType" Category="Contains" />
+<Link Source = "IModel" Target="MovieDirector" Category="Contains" />
+<Link Source = "MovieBase" Target="MovieBase.Directors" Category="Contains" />
+<Link Source = "MovieBase" Target="MovieBase.MovieGenres" Category="Contains" />
+<Link Source = "MovieBase" Target="MovieBase.TitleType" Category="Contains" />
+<Link Source = "MovieBase" Target="MovieBase.Writers" Category="Contains" />
+<Link Source = "MovieBase" Target="MovieBase.Tconst" Category="Contains" />
+<Link Source="MovieBase" Target="TitleType" From="MovieBase.TitleTypeType" To="TitleType.Type" Name="MovieBase -> TitleType" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "MovieBase" Target="MovieBase.EndYear" Category="Contains" />
+<Link Source = "MovieBase" Target="MovieBase.IsAdult" Category="Contains" />
+<Link Source = "MovieBase" Target="MovieBase.OriginalTitle" Category="Contains" />
+<Link Source = "MovieBase" Target="MovieBase.PrimaryTitle" Category="Contains" />
+<Link Source = "MovieBase" Target="MovieBase.RuntimeMins" Category="Contains" />
+<Link Source = "MovieBase" Target="MovieBase.StartYear" Category="Contains" />
+<Link Source = "MovieBase" Target="MovieBase.TitleTypeType" Category="Contains" />
+<Link Source = "IModel" Target="MovieGenre" Category="Contains" />
+<Link Source = "MovieDirector" Target="MovieDirector.MovieBase" Category="Contains" />
+<Link Source = "MovieDirector" Target="MovieDirector.Person" Category="Contains" />
+<Link Source = "MovieDirector" Target="MovieDirector.Tconst" Category="Contains" />
+<Link Source="MovieDirector" Target="Person" From="MovieDirector.Nconst" To="Person.Nconst" Name="MovieDirector -> Person" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="MovieDirector" Target="MovieBase" From="MovieDirector.Tconst" To="MovieBase.Tconst" Name="MovieDirector -> MovieBase" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "MovieDirector" Target="MovieDirector.Nconst" Category="Contains" />
+<Link Source = "IModel" Target="MovieWriter" Category="Contains" />
+<Link Source = "MovieGenre" Target="MovieGenre.Genre" Category="Contains" />
+<Link Source = "MovieGenre" Target="MovieGenre.MovieBase" Category="Contains" />
+<Link Source = "MovieGenre" Target="MovieGenre.Tconst" Category="Contains" />
+<Link Source="MovieGenre" Target="Genre" From="MovieGenre.GenreType" To="Genre.GenreType" Name="MovieGenre -> Genre" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="MovieGenre" Target="MovieBase" From="MovieGenre.Tconst" To="MovieBase.Tconst" Name="MovieGenre -> MovieBase" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "MovieGenre" Target="MovieGenre.GenreType" Category="Contains" />
+<Link Source = "IModel" Target="Person" Category="Contains" />
+<Link Source = "MovieWriter" Target="MovieWriter.MovieBase" Category="Contains" />
+<Link Source = "MovieWriter" Target="MovieWriter.Person" Category="Contains" />
+<Link Source = "MovieWriter" Target="MovieWriter.Tconst" Category="Contains" />
+<Link Source="MovieWriter" Target="Person" From="MovieWriter.Nconst" To="Person.Nconst" Name="MovieWriter -> Person" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="MovieWriter" Target="MovieBase" From="MovieWriter.Tconst" To="MovieBase.Tconst" Name="MovieWriter -> MovieBase" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "MovieWriter" Target="MovieWriter.Nconst" Category="Contains" />
+<Link Source = "IModel" Target="PersonalCareer" Category="Contains" />
+<Link Source = "Person" Target="Person.BlockBusters" Category="Contains" />
+<Link Source = "Person" Target="Person.Directors" Category="Contains" />
+<Link Source = "Person" Target="Person.PersonalCareers" Category="Contains" />
+<Link Source = "Person" Target="Person.Writers" Category="Contains" />
+<Link Source = "Person" Target="Person.Nconst" Category="Contains" />
+<Link Source = "Person" Target="Person.BirthYear" Category="Contains" />
+<Link Source = "Person" Target="Person.DeathYear" Category="Contains" />
+<Link Source = "Person" Target="Person.PrimaryName" Category="Contains" />
+<Link Source = "IModel" Target="Profession" Category="Contains" />
+<Link Source = "PersonalCareer" Target="PersonalCareer.Person" Category="Contains" />
+<Link Source = "PersonalCareer" Target="PersonalCareer.Profession" Category="Contains" />
+<Link Source = "PersonalCareer" Target="PersonalCareer.Nconst" Category="Contains" />
+<Link Source="PersonalCareer" Target="Person" From="PersonalCareer.Nconst" To="Person.Nconst" Name="PersonalCareer -> Person" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="PersonalCareer" Target="Profession" From="PersonalCareer.PrimProf" To="Profession.PrimaryProfession" Name="PersonalCareer -> Profession" Annotations="" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "PersonalCareer" Target="PersonalCareer.PrimProf" Category="Contains" />
+<Link Source = "IModel" Target="TitleType" Category="Contains" />
+<Link Source = "Profession" Target="Profession.PrimaryProfession" Category="Contains" />
+<Link Source = "IModel" Target="TitleType" Category="Contains" />
+<Link Source = "TitleType" Target="TitleType.Type" Category="Contains" />
+  </Links>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="EntityType" ValueLabel="True">
+      <Condition Expression="HasCategory('EntityType')" />
+      <Setter Property="Background" Value="#FFC0C0C0" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Property Primary" ValueLabel="True">
+      <Condition Expression="HasCategory('Property Primary')" />
+      <Setter Property="Background" Value="#FF008000" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Property Optional" ValueLabel="True">
+      <Condition Expression="HasCategory('Property Optional')" />
+      <Setter Property="Background" Value="#FF808040" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Property Foreign" ValueLabel="True">
+      <Condition Expression="HasCategory('Property Foreign')" />
+      <Setter Property="Background" Value="#FF8080FF" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Property Required" ValueLabel="True">
+      <Condition Expression="HasCategory('Property Required')" />
+      <Setter Property="Background" Value="#FFC0A000" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Navigation Property" ValueLabel="True">
+      <Condition Expression="HasCategory('Navigation Property')" />
+      <Setter Property="Background" Value="#FF990000" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Navigation Collection" ValueLabel="True">
+      <Condition Expression="HasCategory('Navigation Collection')" />
+      <Setter Property="Background" Value="#FFFF3232" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Model" ValueLabel="True">
+      <Condition Expression="HasCategory('Model')" />
+      <Setter Property="Background" Value="#FFFFFFFF" />
+    </Style>
+  </Styles>
+  <Properties>
+    <Property Id="Name" Group="Model Properties" DataType="System.String" />
+    <Property Id="Field"  Description="Backing field" Group="Model Properties" DataType="System.String" />
+    <Property Id="Type"  Description="CLR data type" Group="Model Properties" DataType="System.String" />
+    <Property Id="To" Description="Source property" Group="Model Properties" DataType="System.String" />
+    <Property Id="From" Description="Target property" Group="Model Properties" DataType="System.String" />
+    <Property Id="Dependent" Description="Dependent entity" Group="Model Properties" DataType="System.String" />
+    <Property Id="Inverse" Description="Inverse entity" Group="Model Properties" DataType="System.String" />
+    <Property Id="Principal" Description="Principal entity" Group="Model Properties" DataType="System.String" />    
+    <Property Id="Annotations" Description="Annotations" Group="Model Properties" DataType="System.String" />
+    <Property Id="BaseClass"  Description="Base class" Group="Model Properties" DataType="System.String" />
+    <Property Id="ChangeTrackingStrategy" Description="Change tracking strategy" Group="Model Properties" DataType="System.String" />
+    <Property Id="IsUnique" Group="Model Properties" DataType="System.Boolean" />
+    <Property Id="IsAbstract" Group="Model Properties" DataType="System.Boolean" />
+    <Property Id="ProductVersion" Label="Product Version" Description="EF Core product version" Group="Model Properties" DataType="System.String" />
+    <Property Id="IsIndexed" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsRequired" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsPrimaryKey" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsForeignKey" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsShadow" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsAlternateKey" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsConcurrencyToken" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsIndexed" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsUnicode" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="ValueGenerated" Group="Property Flags" DataType="System.String" />
+    <Property Id="BeforeSaveBehavior" Group="Property Flags" DataType="System.String" />
+    <Property Id="AfterSaveBehavior" Group="Property Flags" DataType="System.String" />
+    <Property Id="PropertyAccessMode" Group="Property Flags" DataType="System.String" />
+  </Properties>
+</DirectedGraph>

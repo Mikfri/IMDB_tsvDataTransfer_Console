@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IMDB_EfDbCons.Migrations
 {
     [DbContext(typeof(IMDb_Context))]
-    [Migration("20240313160943_IMDb_01")]
-    partial class IMDb_01
+    [Migration("20240314215741_imm")]
+    partial class imm
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace IMDB_EfDbCons.Migrations
 {
     /// <inheritdoc />
-    public partial class IMDb_01 : Migration
+    public partial class imm : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

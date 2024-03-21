@@ -15,35 +15,31 @@ public class Program
         string titleCrewTsv = @"C:\Users\mikkf\OneDrive\Dokumenter\Visual Studio 2022\TSVs\title.crew.tsv\data.tsv";
 
         Console.WriteLine("Starting program...");
-        Stopwatch sw = Stopwatch.StartNew();
+        Stopwatch stopwatch = Stopwatch.StartNew();
 
         try
         {
             using (var context = new IMDb_Context())
             {
                 Console.WriteLine("Created context...");
-
                 var loader = new CsvLoader();
                 Console.WriteLine("Created CSV loader...");
+
 
                 // Load the data into instances of the Record class
                 var nameRecords = loader.LoadCsv<NameBasicsRecord>(nameBasicsTsv, 50000);
                 Console.WriteLine($"Loaded {nameRecords.Count} records from {nameBasicsTsv} TSV file...");
-
                 var titleRecords = loader.LoadCsv<TitleBasicsRecord>(titleBasicsTsv, 50000);
                 Console.WriteLine($"Loaded {titleRecords.Count} records from {titleBasicsTsv} TSV file...");
-
                 var titleCrewRecords = loader.LoadCsv<TitleCrewRecord>(titleCrewTsv, 50000);
                 Console.WriteLine($"Loaded {titleCrewRecords.Count} records from {titleCrewTsv} TSV file...");
 
-                // Process NameBasicsRecords and create Persons, Professions, PersonalCareers, and PersonalBlockbusters
-                var (persons, professions, personalCareers, personalBlockbusters) = ProcessNameBasicsRecords(nameRecords);
 
-                // Process TitleBasicsRecords and create MovieBases, TitleTypes, Genres, and MovieGenres
-                var (movieBases, titleTypes, genres, movieGenres) = ProcessTitleBasicsRecords(titleRecords);
+                var (persons, professions, personalCareers, personalBlockbusters) = NameBasicsProcessor.ProcessNameBasicsRecords(nameRecords);
+                var (movieBases, titleTypes, genres, movieGenres) = TitleBasicsProcessor.ProcessTitleBasicsRecords(titleRecords);
+                var (directors, writers) = TitleCrewProcessor.ProcessTitleCrewRecords(titleCrewRecords);
 
-                // Process TitleCrewRecords and create Directors and Writers
-                var (directors, writers) = ProcessTitleCrewRecords(titleCrewRecords);
+
 
                 // Use BulkInsert to insert the records for each table in bulk
                 context.BulkInsert(persons);
@@ -66,156 +62,10 @@ public class Program
             Console.WriteLine($"Stack trace: {ex.StackTrace}");
         }
 
-        sw.Stop();
-        Console.WriteLine($"Total time elapsed: {sw.Elapsed}");
-
-        Console.WriteLine("Ending program...");
-
-        static DateOnly? TryParseDate(string dateValue)
-        {
-            if (dateValue.Equals("\\N", StringComparison.OrdinalIgnoreCase))
-            {
-                return null;
-            }
-
-            // Hvis datoen er i formatet "yyyy-mm-dd"
-            if (DateTime.TryParseExact(dateValue, "yyyy", null, System.Globalization.DateTimeStyles.None, out var dateTime))
-            {
-                return new DateOnly(dateTime.Year, 1, 1);
-            }
-
-            Console.WriteLine($"Fejl ved konvertering af dato: {dateValue}");
-
-            return null;
-        }
-
-        static (List<Person>, HashSet<Profession>, List<PersonalCareer>, List<BlockBuster>) ProcessNameBasicsRecords(List<NameBasicsRecord> nameRecords)
-        {
-            var persons = new List<Person>();
-            var professions = new Dictionary<string, Profession>();
-            var personalCareers = new List<PersonalCareer>();
-            var personalBlockbusters = new List<BlockBuster>();
-
-            foreach (var record in nameRecords)
-            {
-                var person = new Person
-                {
-                    Nconst = record.nconst,
-                    PrimaryName = record.primaryName,
-                    BirthYear = TryParseDate(record.birthYear),
-                    DeathYear = TryParseDate(record.deathYear)
-                };
-                persons.Add(person);
-
-                if (!string.IsNullOrEmpty(record.primaryProfession))
-                {
-                    var professionTypes = record.primaryProfession.Split(',');
-                    foreach (var professionType in professionTypes)
-                    {
-                        if (!professions.ContainsKey(professionType))
-                        {
-                            var profession = new Profession { PrimaryProfession = professionType };
-                            professions.Add(professionType, profession);
-                        }
-
-                        var personalCareer = new PersonalCareer { Nconst = record.nconst, PrimProf = professionType };
-                        personalCareers.Add(personalCareer);
-                    }
-                }
-
-                var tconsts = record.knownForTitles.Split(',');
-                foreach (var tconst in tconsts)
-                {
-                    var blockBuster = new BlockBuster { Nconst = record.nconst, Tconst = tconst };
-                    personalBlockbusters.Add(blockBuster);
-                }
-            }
-
-            return (persons, new HashSet<Profession>(professions.Values), personalCareers, personalBlockbusters);
-        }
-
-
-        static (List<MovieBase>, List<TitleType>, List<Genre>, List<MovieGenre>) ProcessTitleBasicsRecords(List<TitleBasicsRecord> titleRecords)
-        {
-            var movieBases = new List<MovieBase>();
-            var titleTypes = new Dictionary<string, TitleType>();
-            var genres = new Dictionary<string, Genre>();
-            var movieGenres = new List<MovieGenre>();
-
-            foreach (var record in titleRecords)
-            {
-                var movieBase = new MovieBase
-                {
-                    Tconst = record.tconst,
-                    TitleType = new TitleType { Type = record.titleType },
-                    PrimaryTitle = record.primaryTitle,
-                    OriginalTitle = record.originalTitle,
-                    IsAdult = record.isAdult,
-                    StartYear = TryParseDate(record.startYear),
-                    EndYear = TryParseDate(record.endYear),
-                    RuntimeMins = int.TryParse(record.runtimeMinutes, out var runtime) ? runtime : (int?)null
-                };
-                movieBases.Add(movieBase);
-
-                if (!titleTypes.ContainsKey(record.titleType))
-                {
-                    var titleType = new TitleType { Type = record.titleType };
-                    titleTypes.Add(record.titleType, titleType);
-                }
-
-                var genreTypes = record.genres.Split(',');
-                foreach (var genreType in genreTypes)
-                {
-                    if (!genres.ContainsKey(genreType))
-                    {
-                        var genre = new Genre { GenreType = genreType };
-                        genres.Add(genreType, genre);
-                    }
-
-                    var movieGenre = new MovieGenre { Tconst = record.tconst, GenreType = genreType };
-                    movieGenres.Add(movieGenre);
-                }
-            }
-
-            return (movieBases, new List<TitleType>(titleTypes.Values), new List<Genre>(genres.Values), movieGenres);
-        }
-
-        static (List<MovieDirector>, List<MovieWriter>) ProcessTitleCrewRecords(List<TitleCrewRecord> titleCrewRecords)
-        {
-            var directors = new List<MovieDirector>();
-            var writers = new List<MovieWriter>();
-
-            foreach (var record in titleCrewRecords)
-            {
-                if (!string.IsNullOrEmpty(record.directors))
-                {
-                    var directorIds = record.directors.Split(',');
-                    foreach (var directorId in directorIds)
-                    {
-                        var director = new MovieDirector { Tconst = record.tconst, Nconst = directorId };
-                        directors.Add(director);
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(record.writers))
-                {
-                    var writerIds = record.writers.Split(',');
-                    foreach (var writerId in writerIds)
-                    {
-                        var writer = new MovieWriter { Tconst = record.tconst, Nconst = writerId };
-                        writers.Add(writer);
-                    }
-                }
-            }
-
-            return (directors, writers);
-        }
-
-
+        stopwatch.Stop();
+        Console.WriteLine($"Total time elapsed: {stopwatch.Elapsed}");
+        Console.WriteLine("End of program...");       
     }
-
-
-
 
 }
 
