@@ -1,8 +1,7 @@
 ﻿using EFCore.BulkExtensions;
-using IMDB_EfDbCons.DataContext;
 using IMDB_EfDbCons.Insertions;
-using IMDB_EfDbCons.Models;
 using IMDB_EfDbCons.Records;
+using IMDbLib.DataContext;
 using System;
 using System.Diagnostics;
 

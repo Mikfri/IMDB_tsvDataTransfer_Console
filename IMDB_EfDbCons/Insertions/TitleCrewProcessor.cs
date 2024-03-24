@@ -1,5 +1,5 @@
-﻿using IMDB_EfDbCons.Models;
-using IMDB_EfDbCons.Records;
+﻿using IMDB_EfDbCons.Records;
+using IMDbLib.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

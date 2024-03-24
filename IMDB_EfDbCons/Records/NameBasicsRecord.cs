@@ -12,7 +12,7 @@ namespace IMDB_EfDbCons.Records
     /// Vi havde brug for en stærk-type klasse fremfor dynamisk, for at den
     /// kunne indeholde data fra NameBasics filen.
     /// 
-    /// Record er ideelt til DTO klasser, da det er en immutable klasse.
+    /// Record er generelt ideelt til DTO klasser, da det er en immutable klasse.
     /// </summary>
     public class NameBasicsRecord
     {
