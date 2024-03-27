@@ -10,6 +10,13 @@ namespace IMDB_EfDbCons.Insertions
 {
     public class NameBasicsProcessor
     {
+        /// <summary>
+        /// Metodenavn: ProcessNameBasicsRecords
+        /// Tager imod en liste af NameBasicsRecord og returnerer
+        /// 4 lister: Person, Profession, PersonalCareer og BlockBuster
+        /// </summary>
+        /// <param name="nameRecords"></param>
+        /// <returns></returns>
         public static (List<Person>, HashSet<Profession>, List<PersonalCareer>, List<BlockBuster>) ProcessNameBasicsRecords(List<NameBasicsRecord> nameRecords)
         {
             var persons = new List<Person>();

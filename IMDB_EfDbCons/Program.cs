@@ -26,11 +26,11 @@ public class Program
 
 
                 // Load the data into instances of the Record class
-                var nameRecords = loader.LoadCsv<NameBasicsRecord>(nameBasicsTsv, 50000);
+                var nameRecords = loader.LoadCsv<NameBasicsRecord>(nameBasicsTsv, 100000);
                 Console.WriteLine($"Loaded {nameRecords.Count} records from {nameBasicsTsv} TSV file...");
-                var titleRecords = loader.LoadCsv<TitleBasicsRecord>(titleBasicsTsv, 50000);
+                var titleRecords = loader.LoadCsv<TitleBasicsRecord>(titleBasicsTsv, 100000);
                 Console.WriteLine($"Loaded {titleRecords.Count} records from {titleBasicsTsv} TSV file...");
-                var titleCrewRecords = loader.LoadCsv<TitleCrewRecord>(titleCrewTsv, 50000);
+                var titleCrewRecords = loader.LoadCsv<TitleCrewRecord>(titleCrewTsv, 100000);
                 Console.WriteLine($"Loaded {titleCrewRecords.Count} records from {titleCrewTsv} TSV file...");
 
 
