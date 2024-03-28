@@ -16,7 +16,7 @@ namespace IMDB_EfDbCons.Insertions
             using (var reader = new StreamReader(filePath))
             using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                Delimiter = "\t",
+                Delimiter = "\t",   // Tab separated
                 BadDataFound = null // Ignore bad data
             }))
             {

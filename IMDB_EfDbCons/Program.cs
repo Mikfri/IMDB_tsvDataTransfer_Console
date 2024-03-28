@@ -34,7 +34,7 @@ public class Program
                 Console.WriteLine($"Loaded {titleCrewRecords.Count} records from {titleCrewTsv} TSV file...");
 
 
-                var (persons, professions, personalCareers, personalBlockbusters) = NameBasicsProcessor.ProcessNameBasicsRecords(nameRecords);
+                var (persons, professions, personalCareers, knownForTitles) = NameBasicsProcessor.ProcessNameBasicsRecords(nameRecords);
                 var (movieBases, titleTypes, genres, movieGenres) = TitleBasicsProcessor.ProcessTitleBasicsRecords(titleRecords);
                 var (directors, writers) = TitleCrewProcessor.ProcessTitleCrewRecords(titleCrewRecords);
 
@@ -44,7 +44,7 @@ public class Program
                 context.BulkInsert(persons);
                 context.BulkInsert(professions);
                 context.BulkInsert(personalCareers);
-                context.BulkInsert(personalBlockbusters);
+                context.BulkInsert(knownForTitles);
                 //movieBase.tsv
                 context.BulkInsert(movieBases);
                 context.BulkInsert(titleTypes);

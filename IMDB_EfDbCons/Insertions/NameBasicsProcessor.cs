@@ -13,16 +13,16 @@ namespace IMDB_EfDbCons.Insertions
         /// <summary>
         /// Metodenavn: ProcessNameBasicsRecords
         /// Tager imod en liste af NameBasicsRecord og returnerer
-        /// 4 lister: Person, Profession, PersonalCareer og BlockBuster
+        /// 4 lister: Person, Profession, PersonalCareer og KnownForTitle
         /// </summary>
         /// <param name="nameRecords"></param>
         /// <returns></returns>
-        public static (List<Person>, HashSet<Profession>, List<PersonalCareer>, List<BlockBuster>) ProcessNameBasicsRecords(List<NameBasicsRecord> nameRecords)
+        public static (List<Person>, HashSet<Profession>, List<PersonalCareer>, List<KnownForTitle>) ProcessNameBasicsRecords(List<NameBasicsRecord> nameRecords)
         {
             var persons = new List<Person>();
             var professions = new Dictionary<string, Profession>();
             var personalCareers = new List<PersonalCareer>();
-            var personalBlockbusters = new List<BlockBuster>();
+            var knownForTitles = new List<KnownForTitle>();
 
             foreach (var record in nameRecords)
             {
@@ -54,8 +54,8 @@ namespace IMDB_EfDbCons.Insertions
                 var tconsts = record.knownForTitles.Split(',');
                 foreach (var tconst in tconsts)
                 {
-                    var blockBuster = new BlockBuster { Nconst = record.nconst, Tconst = tconst };
-                    personalBlockbusters.Add(blockBuster);
+                    var blockBuster = new KnownForTitle { Nconst = record.nconst, Tconst = tconst };
+                    knownForTitles.Add(blockBuster);
                 }
             }
 
@@ -77,7 +77,7 @@ namespace IMDB_EfDbCons.Insertions
                 return null;
             }
 
-            return (persons, new HashSet<Profession>(professions.Values), personalCareers, personalBlockbusters);
+            return (persons, new HashSet<Profession>(professions.Values), personalCareers, knownForTitles);
         }
     }
 }
