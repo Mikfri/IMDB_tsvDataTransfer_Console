@@ -5,6 +5,10 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMDbConsole", "IMDB_EfDbCons\IMDbConsole.csproj", "{777FA728-7FD8-4056-8910-27EF73C607D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMDbLib", "..\IMDbLib\IMDbLib\IMDbLib.csproj", "{2A6B5A01-2700-93E5-F75E-80666982475D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMDbREST", "..\IMDbREST\IMDbREST\IMDbREST.csproj", "{A3BB43CA-D354-0AB5-858C-019361806019}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{777FA728-7FD8-4056-8910-27EF73C607D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{777FA728-7FD8-4056-8910-27EF73C607D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{777FA728-7FD8-4056-8910-27EF73C607D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A6B5A01-2700-93E5-F75E-80666982475D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A6B5A01-2700-93E5-F75E-80666982475D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A6B5A01-2700-93E5-F75E-80666982475D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A6B5A01-2700-93E5-F75E-80666982475D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3BB43CA-D354-0AB5-858C-019361806019}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3BB43CA-D354-0AB5-858C-019361806019}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3BB43CA-D354-0AB5-858C-019361806019}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3BB43CA-D354-0AB5-858C-019361806019}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
